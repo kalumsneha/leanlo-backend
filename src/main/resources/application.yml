@@ -1,0 +1,20 @@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /learnlo
+spring:
+  application:
+    name: learnlo-backend
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://learnlo-db.c1qeqsw6kk3k.us-east-1.rds.amazonaws.com:5432/learlo_db
+    username: postgres
+    password: Password12
