@@ -1,4 +1,4 @@
-package com.ontariotechu.sdmt.learnlo.model;
+package com.ontariotechu.sdmt.learnlo.model.base;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

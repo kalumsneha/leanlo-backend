@@ -1,4 +1,6 @@
 package com.ontariotechu.sdmt.learnlo.model;
 
-public class User extends BaseEntity{
+import com.ontariotechu.sdmt.learnlo.model.base.BaseEntity;
+
+public class User extends BaseEntity {
 }
