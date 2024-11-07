@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/teacher")
+@RequestMapping("api/v1/teacher")
 @Slf4j
 public class TeacherController {
 

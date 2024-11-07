@@ -1,6 +1,5 @@
-
 server:
-  port: 8080
+  port: 8085
   servlet:
     context-path: /learnlo
 spring:
@@ -15,6 +14,6 @@ spring:
     generate-ddl: true
     show-sql: true
   datasource:
-    url: jdbc:postgresql://learnlo-db.c1qeqsw6kk3k.us-east-1.rds.amazonaws.com:5432/learlo_db
+    url: jdbc:postgresql://learnlo-lms-db.c3mm0kmcmilo.us-east-2.rds.amazonaws.com:5432/learnlo_lms_db
     username: postgres
     password: Password12
