@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "courses")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course extends NamedEntity {

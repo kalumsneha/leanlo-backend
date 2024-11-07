@@ -1,4 +1,4 @@
-package com.ontariotechu.sdmt.learnlo_backend;
+package com.ontariotechu.sdmt.learnlo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
