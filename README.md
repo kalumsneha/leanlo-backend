@@ -1,5 +1,5 @@
 # leanlo-backend
-The backend application for the LearnLo LMS project of Software Dev Methods and Tools Course. 
+The backend application for the LearnLo LMS project of Software Dev Methods and Tools Course. Intial
 
 # User Stories
 
