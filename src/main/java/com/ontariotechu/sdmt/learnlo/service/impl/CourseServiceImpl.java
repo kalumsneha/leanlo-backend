@@ -1,5 +1,6 @@
 package com.ontariotechu.sdmt.learnlo.service.impl;
 
+import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
 import com.ontariotechu.sdmt.learnlo.model.Course;
 import com.ontariotechu.sdmt.learnlo.repository.CourseRepository;
 import com.ontariotechu.sdmt.learnlo.service.CourseService;
@@ -35,7 +36,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course updateCourse(String courseCode, Course course) {
-        Course courseToUpdate = this.courseRepository.findByCode(courseCode).orElseThrow();
+        Course courseToUpdate = this.courseRepository.findByCode(courseCode).orElseThrow(() -> new NotFoundException("Could not find course by the provided course code"));
         courseToUpdate.setName(course.getName());
         courseToUpdate.setDescription(course.getDescription());
         return this.courseRepository.save(courseToUpdate);
