@@ -17,11 +17,10 @@ import lombok.NoArgsConstructor;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TeacherCourse extends BaseEntity {
+    private String teacherCourseId;
     private String teacherId;
-    private String instructor;
     private String courseCode;
-    private String courseName;
     private String venue;
     private String mode;
-    private String daysAndTimes;
+    private String daysAndTime;
 }

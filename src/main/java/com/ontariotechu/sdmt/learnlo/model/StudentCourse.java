@@ -17,11 +17,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentCourse extends BaseEntity {
+    private String studentCourseId;
     private String studentId;
-    private String studentName;
-    private String studentEmail;
-    private String courseCode;
-    private String courseTime;
-    private String teacherId;
-    private String instructor;
+    private String teacherCourseId;
 }
