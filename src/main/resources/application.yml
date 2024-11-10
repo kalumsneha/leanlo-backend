@@ -14,6 +14,8 @@ spring:
     generate-ddl: true
     show-sql: true
   datasource:
-    url: jdbc:postgresql://learnlo-lms-db.c3mm0kmcmilo.us-east-2.rds.amazonaws.com:5432/learnlo_lms_db
-    username: postgres
+    #url: jdbc:postgresql://learnlo-lms-db.c3mm0kmcmilo.us-east-2.rds.amazonaws.com:5432/learnlo_lms_db
+    #username: postgres
+    url: jdbc:postgresql://localhost:5432/learnlo_lms
+    username: learnlo_admin
     password: Password12

@@ -7,6 +7,7 @@ import com.ontariotechu.sdmt.learnlo.model.Course;
 import com.ontariotechu.sdmt.learnlo.service.CourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Course saveCourse(@RequestBody Course course) throws JsonProcessingException {
         log.info("Creating Course: {}", new ObjectMapper().writeValueAsString(course));

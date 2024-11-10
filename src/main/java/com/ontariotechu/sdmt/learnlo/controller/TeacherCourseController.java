@@ -2,18 +2,13 @@ package com.ontariotechu.sdmt.learnlo.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
-import com.ontariotechu.sdmt.learnlo.model.Student;
-import com.ontariotechu.sdmt.learnlo.model.StudentCourse;
 import com.ontariotechu.sdmt.learnlo.model.TeacherCourse;
-import com.ontariotechu.sdmt.learnlo.service.StudentCourseService;
 import com.ontariotechu.sdmt.learnlo.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/teacher-course")
