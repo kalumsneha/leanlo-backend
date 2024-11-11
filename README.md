@@ -3,6 +3,7 @@ The backend application for the LearnLo LMS project of Software Dev Methods and 
 
 # User Stories
 
+TO-DO
 As a service, I want to be able to create new users on LearnIO, so that the users can be able to login using the provided credentials.
 
 As a service, I want to be able to update the user password, so that the user can use the new password to login when reset.
@@ -10,6 +11,15 @@ As a service, I want to be able to update the user password, so that the user ca
 As a service, I should be able to login a user on the system and return a JWT token, so that the user can login on the UI.
 
 As a service, I should be able to logout a user on the system, so that the JWT token can be set to expired.
+
+As a task, I should deploy the backend service on Google Cloud, so that the service can be accessible via the internet.
+
+As a task, I should create the process flow diagram for some of the features, so that the the end to end process of the features can be visualized.
+
+
+DONE
+
+As a task, I should design the database, so that all tables, columns and relationships can be visualised.
 
 As a service, I should be able to create new courses, so that students can be able to enrol for the courses.
 
@@ -25,13 +35,31 @@ As a service I should be able to return a list of courses that the student has e
 
 As a service, I should be able to get a course, so that the course details can be rendered to the user.
 
+As a service, I should be able to create a teacher, so that the teacher can be assigned to a course.
+
+As a service, I should be able to update a teacher, so that the teacher's details can be modified.
+
+As a service, I should be able to get a list of teachers on the system, so that the user can view this information.
+
+As a service, I should be able to get a teacher by teacher id, so that the details of a particular teacher can be viewed by the user.
+
+As a service, I should be able to create a student, so that the student can be enrolled to a course.
+
+As a service, I should be able to update a student, so that the student's details can be modified.
+
+As a service, I should be able to get a list of students on the system, so that the user can view this information.
+
+As a service, I should be able to get a student by student id, so that the details of a particular student can be viewed by the user.
+
+As a service, I should be able to assign a course to one or more teachers, so that the student can enroll to particular course and teacher.
+
+As a service, I should be able to delete a course teacher configuration, so that an changes can be applied.
+
+As a service, get course teacher configurations by either teacher id or course code, so that the details can be viewed by a user.
+
 As a task, I should setup CI CD Pipeline, so that any changes done on the system can be deployed incrementally.
 
-As a task, I should deploy the backend service on Google Cloud, so that the service can be accessible via the internet.
 
-As a task, I should create the process flow diagram for some of the features, so that the the end to end process of the features can be visualized.
-
-As a task, I should design the database, so that all tables, columns and relationships can be visualised.
 
 
 
