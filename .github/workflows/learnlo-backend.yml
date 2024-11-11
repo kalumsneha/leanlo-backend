@@ -1,8 +1,9 @@
 name: Build and Deployment Pipeline
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 jobs:
   build-and-deploy:
     runs-on: [ ubuntu-latest ]
@@ -20,9 +21,9 @@ jobs:
         run: mvn clean install
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: java-app
+          name: learnlo-backend
           path: '${{ github.workspace }}/target/*.jar'
 
       - name: Run Tests
