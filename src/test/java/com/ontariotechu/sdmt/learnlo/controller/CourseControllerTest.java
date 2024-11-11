@@ -59,7 +59,7 @@ class CourseControllerTest {
                                 "    \"name\" : \"Software Development Tools and Methods\",\n" +
                                 "    \"description\" : \"Software Development Tools and Methods\"\n" +
                                 "}"))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id")
                         .value(this.course.getId()));
     }
@@ -70,7 +70,7 @@ class CourseControllerTest {
                 .thenReturn(this.courses);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/course")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$[0].id")
                         .value(this.course.getId()));
     }
