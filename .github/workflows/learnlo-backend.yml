@@ -1,7 +1,9 @@
-name: Deploy to AWS ECS
+name: Build and Deployment Pipeline
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 jobs:
   build-and-deploy:
     runs-on: [ ubuntu-latest ]
@@ -15,46 +17,69 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build Project
-        run: mvn clean install -DskipTests
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'us-east-1'
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: 'true'
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-          REPOSITORY: learnlo-backend
+      - name: Start PostgreSQL on Ubuntu
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+          sudo systemctl start postgresql.service
+          pg_isready
+
+      - name: Create additional user
+        run: |
+          sudo -u postgres psql --command="CREATE USER learnlo_admin PASSWORD 'Password12'" --command="\du"
+
+      - name: Create additional database
+        run: |
+          sudo -u postgres createdb learnlo_lms --owner=learnlo_admin 
+          PGPASSWORD=Password12 
+
+      - name: Build Project
+        run: mvn clean install
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
-          task-definition: learnlo-app-task-definition.json
-          container-name: learnlo-backend
-          image: ${{ steps.build-image.outputs.image }}
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: learnlo-backend-service
-          cluster: DevCluster2
-          wait-for-service-stability: true
+          name: learnlo-backend
+          path: '${{ github.workspace }}/target/*.jar'
+
+      - name: Run Tests
+        run: mvn test
+
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v3
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: 'us-east-1'
+#
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v1
+#        with:
+#          mask-password: 'true'
+#
+#      - name: Build, tag, and push image to Amazon ECR
+#        id: build-image
+#        env:
+#          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#          IMAGE_TAG: ${{ github.sha }}
+#          REPOSITORY: learnlo-backend
+#        run: |
+#          # Build a docker container and
+#          # push it to ECR so that it can
+#          # be deployed to ECS.
+#          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+#          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+#          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+#      - name: Fill in the new image ID in the Amazon ECS task definition
+#        id: task-def
+#        uses: aws-actions/amazon-ecs-render-task-definition@v1
+#        with:
+#          task-definition: learnlo-app-task-definition.json
+#          container-name: learnlo-backend
+#          image: ${{ steps.build-image.outputs.image }}
+#      - name: Deploy Amazon ECS task definition
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#        with:
+#          task-definition: ${{ steps.task-def.outputs.task-definition }}
+#          service: learnlo-backend-service
+#          cluster: DevCluster2
+#          wait-for-service-stability: true
