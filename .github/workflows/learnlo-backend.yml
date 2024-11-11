@@ -17,6 +17,20 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Start PostgreSQL on Ubuntu
+        run: |
+          sudo systemctl start postgresql.service
+          pg_isready
+
+      - name: Create additional user
+        run: |
+          sudo -u postgres psql --command="CREATE USER learnlo_admin PASSWORD 'Password12'" --command="\du"
+
+      - name: Create additional database
+        run: |
+          sudo -u postgres createdb learnlo_lms --owner=learnlo_admin 
+          PGPASSWORD=Password12 
+
       - name: Build Project
         run: mvn clean install
 
