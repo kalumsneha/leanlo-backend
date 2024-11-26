@@ -1,11 +1,12 @@
 package com.ontariotechu.sdmt.learnlo.exception;
 
 import com.ontariotechu.sdmt.learnlo.exception.entity.ErrorResponse;
-import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
-import com.ontariotechu.sdmt.learnlo.exception.type.ServiceException;
+import com.ontariotechu.sdmt.learnlo.exception.type.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.TypeMismatchException;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -39,16 +40,47 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             TypeMismatchException.class,
             WebExchangeBindException.class,
             MethodArgumentTypeMismatchException.class,
-            ConstraintViolationException.class})
+            ConstraintViolationException.class,
+            DataIntegrityViolationException.class,
+            DuplicateException.class,
+            ServiceException.class,
+            IllegalArgumentException.class,
+            InvalidDataAccessApiUsageException.class,
+            UnauthorizedException.class,
+            BadRequestException.class})
     public final ResponseEntity<ErrorResponse> exceptionHandler(
             Exception exception, WebRequest webRequest){
         log.info("exceptionHandler of GlobalExceptionHandler");
 
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpStatus status;
-
-        if(exception instanceof ServiceException){
-            log.info("exceptionHandler of GlobalExceptionHandler throws ServiceException");
+        if(exception instanceof DuplicateException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws DuplicateException");
+            status = HttpStatus.CONFLICT;
+            return this.exceptionHandler(exception, httpHeaders, status, webRequest);
+        }
+        else if(exception instanceof NotFoundException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws NotFoundException");
+            status = HttpStatus.NOT_FOUND;
+            return this.exceptionHandler(exception, httpHeaders, status, webRequest);
+        }
+        else if(exception instanceof BadRequestException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws BadRequestException");
+            status = HttpStatus.BAD_REQUEST;
+            return this.exceptionHandler(exception, httpHeaders, status, webRequest);
+        }
+        else if(exception instanceof UnauthorizedException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws UnauthorizedException");
+            status = HttpStatus.UNAUTHORIZED;
+            return this.exceptionHandler(exception, httpHeaders, status, webRequest);
+        }
+        else if(exception instanceof IllegalArgumentException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws IllegalArgumentException");
+            status = HttpStatus.BAD_REQUEST;
+            return this.exceptionHandler(exception, httpHeaders, status, webRequest);
+        }
+        else if(exception instanceof InvalidDataAccessApiUsageException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws InvalidDataAccessApiUsageException");
             status = HttpStatus.BAD_REQUEST;
             return this.exceptionHandler(exception, httpHeaders, status, webRequest);
         }
@@ -68,6 +100,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             status = HttpStatus.BAD_REQUEST;
             String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
             return exceptionHandler(exception, httpHeaders, status, Collections.singletonList(error), webRequest);
+        }
+        else if(exception instanceof ServiceException){
+            log.info("exceptionHandler of GlobalExceptionHandler throws ServiceException");
+            status = HttpStatus.BAD_REQUEST;
+            return this.exceptionHandler(exception, httpHeaders, status, webRequest);
         }
         else{
             log.info("exceptionHandler of GlobalExceptionHandler throws Uncaught Exception");
@@ -112,7 +149,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(contentError -> contentError.getDefaultMessage() + " - " + contentError.getField() + " has an invalid value: " + contentError.getRejectedValue())
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<ErrorResponse>(new ErrorResponse(status,
+        return new ResponseEntity<>(new ErrorResponse(status,
                 "Invalid Body Request",
                 errorMessages,
                 LocalDate.now()),

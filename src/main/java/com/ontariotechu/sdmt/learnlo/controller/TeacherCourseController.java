@@ -6,6 +6,9 @@ import com.ontariotechu.sdmt.learnlo.model.TeacherCourse;
 import com.ontariotechu.sdmt.learnlo.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,20 +21,16 @@ public class TeacherCourseController {
     @Autowired
     private TeacherCourseService teacherCourseService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public TeacherCourse saveTeacherCourse(@RequestBody TeacherCourse teacherCourse) throws JsonProcessingException {
+    public TeacherCourse saveTeacherCourse(@Validated @RequestBody TeacherCourse teacherCourse) throws JsonProcessingException {
         log.info("Assigning Course to Teacher: {}", new ObjectMapper().writeValueAsString(teacherCourse));
         return this.teacherCourseService.saveTeacherCourse(teacherCourse);
     }
 
-    /*@GetMapping("/{teacherId}")
-    public Optional<TeacherCourse> getCoursesByTeacherId(@PathVariable String teacherId) {
-        log.info("Fetching courses by teacher id: {}", teacherId);
-        return Optional.ofNullable(this.teacherCourseService.getCoursesByTeacherId(teacherId).orElseThrow(() -> new NotFoundException("Could not find courses assigned to the provided teacher id")));
-    }
-
-     */
-
+    //teacher can access courses assigned to him or her
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_TEACHER')")
     @GetMapping
     public List<TeacherCourse> getCoursesByTeacherIdOrCourseCode(
             @RequestParam(value = "teacherId", required = false) String teacherId,
@@ -40,6 +39,7 @@ public class TeacherCourseController {
         return this.teacherCourseService.getTeacherCoursesByTeacherOrCourseCode(teacherId, courseCode);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{teacherCourseId}")
     public String deleteTeacherCourse(@PathVariable String teacherCourseId){
         log.info("Deleting Teacher Course. teacherCourseId: {}", teacherCourseId);

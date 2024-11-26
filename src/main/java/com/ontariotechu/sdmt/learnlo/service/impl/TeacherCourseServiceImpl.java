@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,5 +33,10 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         TeacherCourse teacherCourse = this.teacherCourseRepository.findByTeacherCourseId(teacherCourseId).orElseThrow(() -> new NotFoundException("Could not find teacher course by the provided teacher course id"));
         this.teacherCourseRepository.delete(teacherCourse);
         return "Successfully deleted entry for teacher course";
+    }
+
+    @Override
+    public Optional<TeacherCourse> getTeacherCourseByTeacherCourseId(String teacherCourseId) {
+        return this.teacherCourseRepository.findByTeacherCourseId(teacherCourseId);
     }
 }
