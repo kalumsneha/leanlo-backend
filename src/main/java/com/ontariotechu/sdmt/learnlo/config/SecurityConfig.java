@@ -1,5 +1,7 @@
 package com.ontariotechu.sdmt.learnlo.config;
 
+import com.ontariotechu.sdmt.learnlo.security.AuthenticationFailureHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,7 +44,16 @@ public class SecurityConfig {
                             .anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            new AuthenticationFailureHandler().formatResponse(response, accessDeniedException.getLocalizedMessage());
+                        })
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            new AuthenticationFailureHandler().formatResponse(response, authException.getLocalizedMessage());
+                        }));
         return http.build();
     }
 

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class StudentCourseController {
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public StudentCourse saveStudentCourse(@RequestBody StudentCourse studentCourse) throws JsonProcessingException {
+    public StudentCourse saveStudentCourse(@Validated @RequestBody StudentCourse studentCourse) throws JsonProcessingException {
         log.info("Enrolling Student to Selected Course: {}", new ObjectMapper().writeValueAsString(studentCourse));
         return this.studentCourseService.saveStudentCourse(studentCourse);
     }

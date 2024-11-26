@@ -4,16 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
 import com.ontariotechu.sdmt.learnlo.exception.type.ServiceException;
+import com.ontariotechu.sdmt.learnlo.model.Role;
 import com.ontariotechu.sdmt.learnlo.model.User;
+import com.ontariotechu.sdmt.learnlo.model.base.Page;
 import com.ontariotechu.sdmt.learnlo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,8 +38,11 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
-    public List<User> getUsers() throws JsonProcessingException {
-        return this.userService.getUsers();
+    public Page<User> getUsers(
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Role role) throws JsonProcessingException {
+        return this.userService.getUsers(pageNumber, pageSize, role);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -54,8 +60,10 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_TEACHER')")
-    @PutMapping("/reset-password/{userId}")
-    public User resetPassword(@PathVariable String userId, @RequestBody User user) throws JsonProcessingException {
+    @PutMapping("/reset-password")
+    public User resetPassword(@RequestBody User user) throws JsonProcessingException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = ((User)authentication.getPrincipal()).getUserId();
         log.info("updating user. userId: {}, user: {}", userId, new ObjectMapper().writeValueAsString(user));
         return this.userService.resetPassword(userId, user);
     }

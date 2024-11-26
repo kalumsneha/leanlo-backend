@@ -3,12 +3,14 @@ package com.ontariotechu.sdmt.learnlo.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
+import com.ontariotechu.sdmt.learnlo.exception.type.ServiceException;
 import com.ontariotechu.sdmt.learnlo.model.Teacher;
 import com.ontariotechu.sdmt.learnlo.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class TeacherController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Teacher saveTeacher(@RequestBody Teacher teacher) throws JsonProcessingException {
+    public Teacher saveTeacher(@Validated @RequestBody Teacher teacher) throws JsonProcessingException, ServiceException {
         log.info("Creating Teacher: {}", new ObjectMapper().writeValueAsString(teacher));
         return this.teacherService.saveTeacher(teacher);
     }

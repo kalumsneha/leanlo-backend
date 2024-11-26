@@ -7,6 +7,7 @@ import com.ontariotechu.sdmt.learnlo.repository.StudentCourseRepository;
 import com.ontariotechu.sdmt.learnlo.service.StudentCourseService;
 import com.ontariotechu.sdmt.learnlo.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +37,11 @@ public class StudentCourseServiceImpl implements StudentCourseService {
     @Override
     public List<StudentCourse> getStudentCoursesByStudentIdOrTeacherCourse(String studentId, String teacherCourseId) {
 
-
-        List<StudentCourse> studentCourses = this.studentCourseRepository.findAllByStudentIdOrTeacherCourseId(studentId, teacherCourseId);
+        List<StudentCourse> studentCourses;
+        if(StringUtils.isEmpty(studentId) && StringUtils.isEmpty(teacherCourseId))
+            studentCourses = this.studentCourseRepository.findAll();
+        else
+            studentCourses = this.studentCourseRepository.findAllByStudentIdOrTeacherCourseId(studentId, teacherCourseId);
 
         for(StudentCourse studentCourse : studentCourses){
             TeacherCourse teacherCourse = this.teacherCourseService.getTeacherCourseByTeacherCourseId(studentCourse.getTeacherCourseId()).orElseThrow(() -> new NotFoundException("Could not find teacher course by the teacher course id"));

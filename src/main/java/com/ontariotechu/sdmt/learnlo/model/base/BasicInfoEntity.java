@@ -16,7 +16,6 @@ public class BasicInfoEntity extends BaseEntity {
     private String firstName;
 
     @Column(name = "middlename")
-    @NotEmpty(message = "middleName is required")
     private String middleName;
 
     @Column(name = "lastname", nullable = false)
