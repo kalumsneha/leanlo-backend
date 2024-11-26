@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,6 +45,7 @@ class CourseControllerTest {
         this.courses = List.of(course);
     }
 
+    @WithMockUser(username = "mfernando", roles = "ADMIN")
     @Test
     void saveCourse() throws Exception {
         Course courseToSave = Course.builder()
@@ -53,6 +56,7 @@ class CourseControllerTest {
         Mockito.when(this.courseService.saveCourse(courseToSave))
                 .thenReturn(course);
         mockMvc.perform(post("/api/v1/course")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"code\" : \"SDTM1001\",\n" +
@@ -64,6 +68,7 @@ class CourseControllerTest {
                         .value(this.course.getId()));
     }
 
+    @WithMockUser(username = "mfernando", roles = "ADMIN")
     @Test
     void getAllCourses() throws Exception {
         Mockito.when(this.courseService.getAllCourses())
@@ -75,6 +80,7 @@ class CourseControllerTest {
                         .value(this.course.getId()));
     }
 
+    @WithMockUser(username = "mfernando", roles = "ADMIN")
     @Test
     void getCourseByCourseCode() throws Exception {
         Mockito.when(this.courseService.getCourseByCourseCode(course.getCode()))
@@ -86,6 +92,7 @@ class CourseControllerTest {
                         .value(this.course.getId()));
     }
 
+    @WithMockUser(username = "mfernando", roles = "ADMIN")
     @Test
     void updateCourse() throws Exception {
         Course courseToUpdate = Course.builder()
@@ -96,6 +103,7 @@ class CourseControllerTest {
                 .thenReturn(course);
         mockMvc.perform(put("/api/v1/course/SDTM1001")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf())
                         .content("{\n" +
                                 "    \"name\" : \"Software Development Tools and Methods\",\n" +
                                 "    \"description\" : \"Software Development Tools and Methods\"\n" +

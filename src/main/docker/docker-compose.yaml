@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  app:
+    image: 'wmsfernando/learnlo-backend:latest'
+    build:
+      context: .
+    container_name: app
+    ports:
+      - "8085:8085"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/learnlo_lms
+      - SPRING_DATASOURCE_USERNAME=learnlo_admin
+      - SPRING_DATASOURCE_PASSWORD=Password12
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=insert
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_DB=learnlo_lms
+      - POSTGRES_USER=learnlo_admin
+      - POSTGRES_PASSWORD=Password12
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

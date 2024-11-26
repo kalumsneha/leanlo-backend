@@ -1,11 +1,15 @@
 package com.ontariotechu.sdmt.learnlo.service.impl;
 
+import com.ontariotechu.sdmt.learnlo.exception.type.DuplicateException;
 import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
+import com.ontariotechu.sdmt.learnlo.exception.type.ServiceException;
 import com.ontariotechu.sdmt.learnlo.model.Student;
 import com.ontariotechu.sdmt.learnlo.repository.StudentRepository;
 import com.ontariotechu.sdmt.learnlo.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +23,18 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public Student saveStudent(Student student) {
-        return this.studentRepository.save(student);
+    public Student saveStudent(Student student) throws ServiceException {
+        try{
+            return this.studentRepository.save(student);
+        }
+        catch (ConstraintViolationException | DataIntegrityViolationException ex){
+            log.error("Unable to create student. {}", ex.getMessage());
+            throw new DuplicateException("Duplicate Entry");
+        }
+        catch (Exception ex){
+            log.error("Unable to create student. {}", ex.getMessage());
+            throw new ServiceException("Unable to create student");
+        }
     }
 
     @Override
