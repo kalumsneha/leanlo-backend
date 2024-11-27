@@ -24,9 +24,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminSummary getAdminSummary(){
+
+        long studentCnt = this.studentRepository.count();
+        long courseCnt = this.courseRepository.count();
+        long teacherCnt = this.teacherRepository.count();
+        log.info("student count: {}, teacher count: {}, course count: {}", studentCnt, teacherCnt, courseCnt);
         return AdminSummary.builder()
-                .teacherCount(0)
-                .studentCount(0)
-                .courseCount(0).build();
+                .teacherCount(teacherCnt)
+                .studentCount(studentCnt)
+                .courseCount(courseCnt).build();
     }
 }

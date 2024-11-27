@@ -2,10 +2,10 @@ package com.ontariotechu.sdmt.learnlo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ontariotechu.sdmt.learnlo.model.base.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
@@ -14,8 +14,8 @@ import lombok.*;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdminSummary{
-    private int courseCount;
-    private int studentCount;
-    private int teacherCount;
+    private long courseCount;
+    private long studentCount;
+    private long teacherCount;
 
 }
