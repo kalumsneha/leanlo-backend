@@ -6,6 +6,7 @@ import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
 import com.ontariotechu.sdmt.learnlo.exception.type.ServiceException;
 import com.ontariotechu.sdmt.learnlo.model.Student;
 import com.ontariotechu.sdmt.learnlo.service.StudentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Student API")
 @RestController
 @RequestMapping("/api/v1/student")
 @Slf4j
