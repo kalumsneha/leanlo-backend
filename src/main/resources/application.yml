@@ -16,9 +16,23 @@ spring:
   datasource:
     #url: jdbc:postgresql://learnlo-lms-db.c3mm0kmcmilo.us-east-2.rds.amazonaws.com:5432/learnlo_lms_db
     #username: postgres
-    url: jdbc:postgresql://localhost:5432/learnlo_lms
-    username: learnlo_admin
-    password: Password12
+    #url: jdbc:postgresql://34.57.209.128:5432/learnlo_lms
+    #url: jdbc:mysql:///learnlo_lms?cloudSqlInstance=ontario-tech-university:us-central1:learnlo-lms&socketFactory=com.google.cloud.sql.mysql.SocketFactory&user=learnlo_admin&password=Password12&useSSL=false
+    #url: jdbc:postgresql://localhost:5432/learnlo_lms
+    #username: learnlo_admin
+    #password: Password12
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql:///${DB_DATABASE:learnlo_lms}
+    username: ${DB_USERNAME:learnlo_admin}
+    password: ${DB_PASSWORD:Password12}
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 5
+      data-source-properties:
+        socketFactory: com.google.cloud.sql.postgres.SocketFactory
+        cloudSqlInstance: ${DB_CLOUD_SQL_INSTANCE:ontario-tech-university:us-central1:learnlo-lms}
+        enableIamAuth: true
+        sslmode: disable
 
 springdoc:
   api-docs:
