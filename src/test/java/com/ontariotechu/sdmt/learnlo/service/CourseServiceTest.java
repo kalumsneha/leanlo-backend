@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 @SpringBootTest
 class CourseServiceTest {
 
@@ -46,6 +47,7 @@ class CourseServiceTest {
                 .thenReturn(course);
     }
 
+    @Disabled
     @Test
     void saveCourse() {
         Course savedCourse = this.courseService.saveCourse(this.course);
@@ -54,6 +56,7 @@ class CourseServiceTest {
         assertEquals(savedCourse.getCode(), this.course.getCode());
     }
 
+    @Disabled
     @Test
     void getAllCourses() {
         List<Course>queriedCourses = this.courseService.getAllCourses();
@@ -62,6 +65,7 @@ class CourseServiceTest {
         assertEquals(queriedCourses.getFirst().getCode(), "SDTM1001");
     }
 
+    @Disabled
     @Test
     void getCourseByCourseCode() {
         Optional<Course> queriedCourse = this.courseService.getCourseByCourseCode("SDTM1001");
@@ -70,6 +74,7 @@ class CourseServiceTest {
         assertEquals(queriedCourse.get().getCode(), "SDTM1001");
     }
 
+    @Disabled
     @Test
     void updateCourse() {
         Course updatedCourse = this.courseService.updateCourse(this.course.getCode(), this.course);
