@@ -1,10 +1,12 @@
 package com.ontariotechu.sdmt.learnlo.service.impl;
 
 import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
+import com.ontariotechu.sdmt.learnlo.model.StudentCourse;
 import com.ontariotechu.sdmt.learnlo.model.TeacherCourse;
 import com.ontariotechu.sdmt.learnlo.repository.TeacherCourseRepository;
 import com.ontariotechu.sdmt.learnlo.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,12 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
 
     @Override
     public List<TeacherCourse> getTeacherCoursesByTeacherOrCourseCode(String teacherId, String courseCode) {
-        return this.teacherCourseRepository.findAllByTeacherIdOrCourseCode(teacherId, courseCode);
+        List<TeacherCourse> teacherCourses;
+        if(StringUtils.isEmpty(teacherId) && StringUtils.isEmpty(courseCode))
+            teacherCourses = this.teacherCourseRepository.findAll();
+        else
+            teacherCourses = this.teacherCourseRepository.findAllByTeacherIdOrCourseCode(teacherId, courseCode);
+        return teacherCourses;
     }
 
     @Override
