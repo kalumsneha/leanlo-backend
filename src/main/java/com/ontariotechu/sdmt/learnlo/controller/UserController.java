@@ -44,6 +44,7 @@ public class UserController {
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) Role role) throws JsonProcessingException {
+        log.info("getting users");
         return this.userService.getUsers(pageNumber, pageSize, role);
     }
 
