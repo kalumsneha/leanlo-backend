@@ -81,7 +81,7 @@ jobs:
       - id: 'deploy'
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
-          service: 'learnlo-api'
+          service: 'learnlo-api2'
           flags: '--allow-unauthenticated'
           image: 'wmsfernando/learnlo-api:latest'
           env_vars: |
