@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface TeacherCourseService {
     TeacherCourse saveTeacherCourse(TeacherCourse teacherCourse);
 
-    List<TeacherCourse> getTeacherCoursesByTeacherOrCourseCode(String teacherId, String courseCode);
+    List<TeacherCourse> getTeacherCoursesByTeacherOrCourseCode(String teacherId, String courseCode, String studentId);
 
     String deleteTeacherCourse(String teacherCourseId);
 
