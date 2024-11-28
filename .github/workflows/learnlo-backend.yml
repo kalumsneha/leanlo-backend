@@ -86,7 +86,7 @@ jobs:
           image: 'wmsfernando/learnlo-api:latest'
           env_vars: |
             DB_DATABASE=${{ secrets.DB_DATABASE }}
-            DB_CLOUD_SQL_INSTANCE=${{ DB_CLOUD_SQL_INSTANCE }}
+            DB_CLOUD_SQL_INSTANCE=${{ secrets.DB_CLOUD_SQL_INSTANCE }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             DB_USERNAME=${{ secrets.DB_USER }}
         if: github.ref == 'refs/heads/main'
