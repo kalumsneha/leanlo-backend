@@ -1,7 +1,6 @@
 package com.ontariotechu.sdmt.learnlo.service.impl;
 
 import com.ontariotechu.sdmt.learnlo.exception.type.NotFoundException;
-import com.ontariotechu.sdmt.learnlo.model.StudentCourse;
 import com.ontariotechu.sdmt.learnlo.model.TeacherCourse;
 import com.ontariotechu.sdmt.learnlo.repository.TeacherCourseRepository;
 import com.ontariotechu.sdmt.learnlo.service.TeacherCourseService;
@@ -26,12 +25,19 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
     }
 
     @Override
-    public List<TeacherCourse> getTeacherCoursesByTeacherOrCourseCode(String teacherId, String courseCode) {
+    public List<TeacherCourse> getTeacherCoursesByTeacherOrCourseCode(String teacherId, String courseCode, String studentId) {
         List<TeacherCourse> teacherCourses;
-        if(StringUtils.isEmpty(teacherId) && StringUtils.isEmpty(courseCode))
-            teacherCourses = this.teacherCourseRepository.findAll();
-        else
-            teacherCourses = this.teacherCourseRepository.findAllByTeacherIdOrCourseCode(teacherId, courseCode);
+
+        if(!StringUtils.isEmpty(studentId))
+            teacherCourses = this.teacherCourseRepository.findAllTeacherCoursesForEnrollment(studentId);
+        else {
+            if(StringUtils.isEmpty(teacherId) && StringUtils.isEmpty(courseCode))
+                teacherCourses = this.teacherCourseRepository.findAll();
+            else
+                teacherCourses = this.teacherCourseRepository.findAllByTeacherIdOrCourseCode(teacherId, courseCode);
+        }
+
+
         return teacherCourses;
     }
 

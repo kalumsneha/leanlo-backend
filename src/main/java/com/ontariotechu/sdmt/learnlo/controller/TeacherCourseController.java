@@ -36,9 +36,10 @@ public class TeacherCourseController {
     @GetMapping
     public List<TeacherCourse> getCoursesByTeacherIdOrCourseCode(
             @RequestParam(value = "teacherId", required = false) String teacherId,
-            @RequestParam(value = "courseCode", required = false) String courseCode) {
-        log.info("Fetching teacher courses. teacher id: {}, courseCode: {}", teacherId, courseCode);
-        return this.teacherCourseService.getTeacherCoursesByTeacherOrCourseCode(teacherId, courseCode);
+            @RequestParam(value = "courseCode", required = false) String courseCode,
+            @RequestParam(value = "studentId", required = false) String studentId) {
+        log.info("Fetching teacher courses. teacher id: {}, courseCode: {}, studentId: {}", teacherId, courseCode, studentId);
+        return this.teacherCourseService.getTeacherCoursesByTeacherOrCourseCode(teacherId, courseCode, studentId);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
